@@ -1,9 +1,8 @@
 {
   "name": "getinforbyhour",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Thống kê status theo thời gian",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
