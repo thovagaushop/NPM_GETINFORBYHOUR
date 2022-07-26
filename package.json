@@ -1,17 +1,22 @@
 {
-  "name": "anh-nam",
+  "name": "getinforbyhour",
   "version": "1.0.0",
-  "description": "",
-  "main": "main.js",
-  "type": "module",
+  "description": "Thống kê status theo thời gian",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thovagaushop/NPM_GETINFORBYHOUR.git"
+  },
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thovagaushop/NPM_GETINFORBYHOUR/issues"
+  },
+  "homepage": "https://github.com/thovagaushop/NPM_GETINFORBYHOUR#readme",
   "dependencies": {
-    "moment": "^2.29.4",
-    "node-fetch": "^3.2.9"
+    "moment": "^2.29.4"
   }
 }

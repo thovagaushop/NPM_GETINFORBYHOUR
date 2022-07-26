@@ -2,7 +2,7 @@ import moment from 'moment'
 
 
 //Hàm thống kê theo giờ
-export function getInformationByHour(data, type_time, array_type_name) {
+function getInformationByHour(data, type_time, array_type_name) {
 
     //Length status cần thống kê
     var number_fields = array_type_name.length
