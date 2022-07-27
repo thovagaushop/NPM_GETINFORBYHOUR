@@ -20,9 +20,9 @@ function getInformationByHour(data, type_time, array_type_name) {
         var arr = []
         var index = ""
         if (type_time === 12) {
-            var time_tails = (i + 1) > 12 ? " pm" : " am"
-            index = (((i + 1) % type_time) || type_time).toString() + time_tails
-        } else index = (i + 1).toString()
+            var time_tails = i > 12 ? " pm" : " am"
+            index = ((i % type_time) || type_time).toString() + time_tails
+        } else index = i.toString()
         arr.push(index)
         arr.push(...defaultArr)
         result.push(arr)
@@ -45,7 +45,7 @@ function getInformationByHour(data, type_time, array_type_name) {
 
             //Push vào mảng
             for (var i = 0; i < result.length; i++) {
-                if (i + 1 === hour) {
+                if (i === hour) {
                     var statusIndex = array_type_name.findIndex(type => type === element.node.type)
                     
                     if (statusIndex !== -1) {
