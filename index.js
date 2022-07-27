@@ -16,12 +16,18 @@ function getInformationByHour(data, type_time, array_type_name) {
     //Mảng trả về
     var result = []
 
-    for(var i = 0; i < type_time; i++) {
+    for(var i = 0; i < 24; i++) {
         var arr = []
-        arr.push(i + 1)
+        var index = ""
+        if (type_time === 12) {
+            var time_tails = (i + 1) > 12 ? " pm" : " am"
+            index = (((i + 1) % type_time) || type_time).toString() + time_tails
+        } else index = (i + 1).toString()
+        arr.push(index)
         arr.push(...defaultArr)
         result.push(arr)
     }
+
     
 
     //Check từng node trong data
@@ -35,19 +41,18 @@ function getInformationByHour(data, type_time, array_type_name) {
 
             if (!date.isValid) return "Your time fields is not valid"
 
-            var hour = date.utc().hour() % type_time || type_time
+            var hour = date.utc().hour()
 
             //Push vào mảng
-            result.forEach(resultElement => {
-                if (resultElement[0] === hour) {
-
+            for (var i = 0; i < result.length; i++) {
+                if (i + 1 === hour) {
                     var statusIndex = array_type_name.findIndex(type => type === element.node.type)
                     
                     if (statusIndex !== -1) {
-                        resultElement[statusIndex + 1] += 1
+                        result[i][statusIndex + 1] += 1
                     }
                 }
-            })
+            }
         })
 
         //Trả về mảng
