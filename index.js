@@ -20,7 +20,7 @@ function getInformationByHour(data, type_time, array_type_name) {
         var arr = []
         var index = ""
         if (type_time === 12) {
-            var time_tails = i > 12 ? " pm" : " am"
+            var time_tails = i >= 12 ? " pm" : " am"
             index = ((i % type_time) || type_time).toString() + time_tails
         } else index = i.toString()
         arr.push(index)
