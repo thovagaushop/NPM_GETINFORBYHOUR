@@ -32,61 +32,59 @@ function getInformationByHour(data, type_time, array_type_name, total_amount) {
         result.push(arr)
     }
 
-    
+    if (data.length === 0) {
+        console.log("Your data input must be an array!!!");
+        return null;
+    }
 
-    //Check từng node trong data
-    if (data.length) {
-        data.forEach(element => {
-            if (element.node === undefined) {
-                console.log("Your array element must named : 'node'")
-                return null
-            } 
-            if (element.node.occurredAt === undefined) {
-                console.log("Your time field must named : 'occurredAt'")
-                return null
-            } 
-            if (element.node.type === undefined) {
-                console.log("Your status field must namd : 'type'");
+    //Chạy từng node trong data input
+    data.forEach(element => {
+        if (element.node === undefined) {
+            console.log("Your array element must named : 'node'")
+            return null
+        } 
+        if (element.node.occurredAt === undefined) {
+            console.log("Your time field must named : 'occurredAt'")
+            return null
+        } 
+        if (element.node.type === undefined) {
+            console.log("Your status field must namd : 'type'");
+            return null
+        }
+
+        if (total_amount === true) {
+            if (element.node.charge.amount.amount === undefined) {
+                console.log("Cannot find amount fields");
                 return null
             }
+        }
+        //Lấy date time trong data
+        let date = moment(element.node.occurredAt)
 
-            if (total_amount === true) {
-                if (element.node.charge.amount.amount === undefined) {
-                    console.log("Cannot find amount fields");
-                    return null
-                }
-            }
-            //Lấy date time trong data
-            let date = moment(element.node.occurredAt)
+        if (!date.isValid) {
+            console.log("Your time fields is not valid");
+            return null
+        } 
 
-            if (!date.isValid) {
-                console.log("Your time fields is not valid");
-                return null
-            } 
+        let hour = date.utc().hour()
 
-            let hour = date.utc().hour()
-
-            //Push vào mảng
-            for (let i = 0; i < result.length; i++) {
-                if (i === hour) {
-                    let statusIndex = array_type_name.findIndex(type => type === element.node.type)
-                    
-                    if (statusIndex !== -1) {
-                        result[i][statusIndex + 1] += 1
-                        if (total_amount === true) {
-                            result[i][result[i].length - 1] += parseFloat(element.node.charge.amount.amount)
-                        }
+        //Push vào mảng
+        for (let i = 0; i < result.length; i++) {
+            if (i === hour) {
+                let statusIndex = array_type_name.findIndex(type => type === element.node.type)
+                
+                if (statusIndex !== -1) {
+                    result[i][statusIndex + 1] += 1
+                    if (total_amount === true) {
+                        result[i][result[i].length - 1] += parseFloat(element.node.charge.amount.amount)
                     }
                 }
             }
-        })
+        }
+    })
 
-        //Trả về mảng
-        return result
-    } else {
-        console.log("Your data input must be an array!!!");
-        return null
-    }
+    //Trả về mảng
+    return result
 
 }
 
@@ -105,46 +103,46 @@ function getInformationByDay(data, array_type_name, total_amount) {
         result.push(parseFloat(0))
     }
 
-    //Check từng node trong data
-    if (data.length) {
-        data.forEach(element => {
-            if (element.node === undefined) {
-                console.log("Your array element must named : 'node'")
-                return null
-            } 
-            if (element.node.occurredAt === undefined) {
-                console.log("Your time field must named : 'occurredAt'")
-                return null
-            } 
-            if (element.node.type === undefined) {
-                console.log("Your status field must namd : 'type'");
-                return null
-            }
-
-            if (total_amount === true) {
-                if (element.node.charge.amount.amount === undefined) {
-                    console.log("Cannot find amount fields");
-                    return null
-                }
-            }
-
-            //Push vào mảng
-            let statusIndex = array_type_name.findIndex(type => type === element.node.type)
-
-            if (statusIndex !== -1) {
-                result[statusIndex] += 1
-                if (total_amount === true) {
-                    result[result.length - 1] += parseFloat(element.node.charge.amount.amount)
-                }
-            }
-        })
-
-        //Trả về mảng
-        return result
-    } else {
+    if(data.length === 0) {
         console.log("Your data input must be an array!!!");
         return null
     }
+
+    //Check từng node trong data
+    data.forEach(element => {
+        if (element.node === undefined) {
+            console.log("Your array element must named : 'node'")
+            return null
+        } 
+        if (element.node.occurredAt === undefined) {
+            console.log("Your time field must named : 'occurredAt'")
+            return null
+        } 
+        if (element.node.type === undefined) {
+            console.log("Your status field must namd : 'type'");
+            return null
+        }
+
+        if (total_amount === true) {
+            if (element.node.charge.amount.amount === undefined) {
+                console.log("Cannot find amount fields");
+                return null
+            }
+        }
+
+        //Push vào mảng
+        let statusIndex = array_type_name.findIndex(type => type === element.node.type)
+
+        if (statusIndex !== -1) {
+            result[statusIndex] += 1
+            if (total_amount === true) {
+                result[result.length - 1] += parseFloat(element.node.charge.amount.amount)
+            }
+        }
+    })
+
+    //Trả về mảng
+    return result
 
 }
 module.exports.getInformationByHour = getInformationByHour;
