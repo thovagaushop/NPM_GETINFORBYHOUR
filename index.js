@@ -39,32 +39,9 @@ function getInformationByHour(data, type_time, array_type_name, total_amount) {
 
     //Chạy từng node trong data input
     data.forEach(element => {
-        if (element.node === undefined) {
-            console.log("Your array element must named : 'node'")
-            return null
-        } 
-        if (element.node.occurredAt === undefined) {
-            console.log("Your time field must named : 'occurredAt'")
-            return null
-        } 
-        if (element.node.type === undefined) {
-            console.log("Your status field must namd : 'type'");
-            return null
-        }
-
-        if (total_amount === true) {
-            if (element.node.charge.amount.amount === undefined) {
-                console.log("Cannot find amount fields");
-                return null
-            }
-        }
+    
         //Lấy date time trong data
         let date = moment(element.node.occurredAt)
-
-        if (!date.isValid) {
-            console.log("Your time fields is not valid");
-            return null
-        } 
 
         let hour = date.utc().hour()
 
@@ -88,19 +65,37 @@ function getInformationByHour(data, type_time, array_type_name, total_amount) {
 
 }
 
-function getInformationByDay(data, array_type_name, total_amount) {
+function getInformationByDay(start_date, end_date, data, array_type_name, total_amount) {
+    //format Date
+    let formatStartDate = moment(start_date, 'DD/MM/YYYY')
+    let formatEndDate = moment(end_date, 'DD/MM/YYYY')
+
     //Length status cần thống kê
     let number_fields = array_type_name.length
+
+    let defaultArr = []
+
+    for(let i = 0; i < number_fields; i++) {
+        defaultArr.push(0)
+    }
+
+    if (total_amount === true) {
+        defaultArr.push(parseFloat(0))
+    }
 
     //Mảng trả về
     let result = []
 
-    for(let i = 0; i < number_fields; i++) {
-        result.push(0)
-    }
-
-    if (total_amount === true) {
-        result.push(parseFloat(0))
+    let nextDay = formatStartDate.clone()
+    console.log(nextDay.format('MM/DD/YYYY'));
+    
+    while (nextDay.isSameOrBefore(formatEndDate)) {
+        
+        let arr = []
+        arr.push(nextDay.format('MM/DD/YYYY'))
+        arr.push(...defaultArr)
+        result.push(arr)
+        nextDay.add(1, 'days')
     }
 
     if(data.length === 0) {
@@ -110,33 +105,19 @@ function getInformationByDay(data, array_type_name, total_amount) {
 
     //Check từng node trong data
     data.forEach(element => {
-        if (element.node === undefined) {
-            console.log("Your array element must named : 'node'")
-            return null
-        } 
-        if (element.node.occurredAt === undefined) {
-            console.log("Your time field must named : 'occurredAt'")
-            return null
-        } 
-        if (element.node.type === undefined) {
-            console.log("Your status field must namd : 'type'");
-            return null
-        }
-
-        if (total_amount === true) {
-            if (element.node.charge.amount.amount === undefined) {
-                console.log("Cannot find amount fields");
-                return null
-            }
-        }
+        let date = moment(element.node.occurredAt)
 
         //Push vào mảng
-        let statusIndex = array_type_name.findIndex(type => type === element.node.type)
-
-        if (statusIndex !== -1) {
-            result[statusIndex] += 1
-            if (total_amount === true) {
-                result[result.length - 1] += parseFloat(element.node.charge.amount.amount)
+        for (let i = 0; i < result.length; i++) {
+            if (result[i][0] === date.format('MM/DD/YYYY')) {
+                let statusIndex = array_type_name.findIndex(type => type === element.node.type)
+                
+                if (statusIndex !== -1) {
+                    result[i][statusIndex + 1] += 1
+                    if (total_amount === true) {
+                        result[i][result[i].length - 1] += parseFloat(element.node.charge.amount.amount)
+                    }
+                }
             }
         }
     })
@@ -145,5 +126,6 @@ function getInformationByDay(data, array_type_name, total_amount) {
     return result
 
 }
+
 module.exports.getInformationByHour = getInformationByHour;
 module.exports.getInformationByDay = getInformationByDay;
