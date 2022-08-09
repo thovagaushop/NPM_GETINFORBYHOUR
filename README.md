@@ -28,5 +28,5 @@ GETINFORBYHOUR supports 3 options :
 
 * *total_amount* - _ true / false / undefined _ (Boolean) (Tính tổng tiền kiếm được, true : Có, có thể không cần điền)*
 
-* *start_date* - _String_ Example ('11/7/2022') format ('DD/MM/YYYY') *
-* *end_date* - _String_ Example ('12/7/2022') format ('DD/MM/YYYY') *
+* *start_date* - _String_ Example ('2022/07/11') format ('YYYY/MM/DD') *
+* *end_date* - _String_ Example ('2022/07/12') format ('YYYY/MM/DD') *

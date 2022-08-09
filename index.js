@@ -67,8 +67,8 @@ function getInformationByHour(data, type_time, array_type_name, total_amount) {
 
 function getInformationByDay(start_date, end_date, data, array_type_name, total_amount) {
     //format Date
-    let formatStartDate = moment(start_date, 'DD/MM/YYYY')
-    let formatEndDate = moment(end_date, 'DD/MM/YYYY')
+    let formatStartDate = moment(start_date, 'YYYY/MM/DD')
+    let formatEndDate = moment(end_date, 'YYYY/MM/DD')
 
     //Length status cần thống kê
     let number_fields = array_type_name.length
@@ -87,12 +87,11 @@ function getInformationByDay(start_date, end_date, data, array_type_name, total_
     let result = []
 
     let nextDay = formatStartDate.clone()
-    console.log(nextDay.format('MM/DD/YYYY'));
     
     while (nextDay.isSameOrBefore(formatEndDate)) {
         
         let arr = []
-        arr.push(nextDay.format('MM/DD/YYYY'))
+        arr.push(nextDay.format('YYYY/MM/DD'))
         arr.push(...defaultArr)
         result.push(arr)
         nextDay.add(1, 'days')
@@ -105,11 +104,13 @@ function getInformationByDay(start_date, end_date, data, array_type_name, total_
 
     //Check từng node trong data
     data.forEach(element => {
-        let date = moment(element.node.occurredAt)
+        let date = moment(element.node.occurredAt).utc()
+        
+        let tepm = date.format('YYYY/MM/DD')
 
         //Push vào mảng
         for (let i = 0; i < result.length; i++) {
-            if (result[i][0] === date.format('MM/DD/YYYY')) {
+            if (result[i][0] === tepm) {
                 let statusIndex = array_type_name.findIndex(type => type === element.node.type)
                 
                 if (statusIndex !== -1) {
