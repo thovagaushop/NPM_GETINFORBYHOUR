@@ -2,7 +2,10 @@ const moment = require('moment')
 
 
 //Hàm thống kê theo giờ
-function getInformationByHour(data, type_time, array_type_name, total_amount) {
+function getInformationByHour(data, type_time, object_input, total_amount) {
+    let array_type_name = Object.values(object_input)
+
+    let array_label = Object.keys(object_input)
 
     //Length status cần thống kê
     let number_fields = array_type_name.length
@@ -19,6 +22,12 @@ function getInformationByHour(data, type_time, array_type_name, total_amount) {
 
     //Mảng trả về
     let result = []
+
+    let tempArr = []
+    tempArr.push('Hour')
+    tempArr.push(...array_label)
+    if (total_amount === true) tempArr.push('Amount')
+    result.push(tempArr)
 
     for(let i = 0; i < 24; i++) {
         let arr = []
@@ -46,7 +55,7 @@ function getInformationByHour(data, type_time, array_type_name, total_amount) {
         let hour = date.utc().hour()
 
         //Push vào mảng
-        for (let i = 0; i < result.length; i++) {
+        for (let i = 1; i < result.length; i++) {
             if (i === hour) {
                 let statusIndex = array_type_name.findIndex(type => type === element.node.type)
                 
@@ -65,7 +74,11 @@ function getInformationByHour(data, type_time, array_type_name, total_amount) {
 
 }
 
-function getInformationByDay(start_date, end_date, data, array_type_name, total_amount) {
+function getInformationByDay(start_date, end_date, data, object_input, total_amount) {
+    let array_type_name = Object.values(object_input)
+
+    let array_label = Object.keys(object_input)
+
     //format Date
     let formatStartDate = moment(start_date, 'YYYY/MM/DD')
     let formatEndDate = moment(end_date, 'YYYY/MM/DD')
@@ -85,6 +98,12 @@ function getInformationByDay(start_date, end_date, data, array_type_name, total_
 
     //Mảng trả về
     let result = []
+
+    let tempArr = []
+    tempArr.push('Date')
+    tempArr.push(...array_label)
+    if (total_amount === true) tempArr.push('Amount')
+    result.push(tempArr)
 
     let nextDay = formatStartDate.clone()
     
@@ -109,7 +128,7 @@ function getInformationByDay(start_date, end_date, data, array_type_name, total_
         let tepm = date.format('YYYY/MM/DD')
 
         //Push vào mảng
-        for (let i = 0; i < result.length; i++) {
+        for (let i = 1; i < result.length; i++) {
             if (result[i][0] === tepm) {
                 let statusIndex = array_type_name.findIndex(type => type === element.node.type)
                 
