@@ -1,8 +1,29 @@
 const moment = require('moment')
 
+function checkDuplicate(data) {
+    data.forEach((element, index) => {
+        let next = index + 1
+        while(next < data.length) {
+            if (data[next].node.charge.id === element.node.charge.id
+                && data[next].node.type === element.node.type) {
+                    data.splice(next, 1)
+                next --
+            }
+            else if (data[next].node.charge.id === element.node.charge.id
+                && data[next].node.type !== element.node.type) {
+                break
+            }
+            next++
+        }
+    });
+    return data
+}
+
 
 //Hàm thống kê theo giờ
-function getInformationByHour(data, type_time, object_input, total_amount) {
+function getInformationByHour(data_input, type_time, object_input, total_amount) {
+    //checkduplicate
+    let data = checkDuplicate(data_input)
     let array_type_name = Object.values(object_input)
 
     let array_label = Object.keys(object_input)
@@ -74,7 +95,9 @@ function getInformationByHour(data, type_time, object_input, total_amount) {
 
 }
 
-function getInformationByDay(start_date, end_date, data, object_input, total_amount) {
+function getInformationByDay(start_date, end_date, data_input, object_input, total_amount) {
+    //check duplicate
+    let data = checkDuplicate(data_input)
     let array_type_name = Object.values(object_input)
 
     let array_label = Object.keys(object_input)
