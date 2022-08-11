@@ -1,21 +1,17 @@
 const moment = require('moment')
 
 function checkDuplicate(data) {
-    data.forEach((element, index) => {
-        let next = index + 1
+    for (let i = 0; i < data.length; i++) {
+        let next = i + 1
         while(next < data.length) {
-            if (data[next].node.charge.id === element.node.charge.id
-                && data[next].node.type === element.node.type) {
-                    data.splice(next, 1)
-                next --
-            }
-            else if (data[next].node.charge.id === element.node.charge.id
-                && data[next].node.type !== element.node.type) {
-                break
+            if (data[next].node.shop.myshopifyDomain === data[i].node.shop.myshopifyDomain) {
+                    data.splice(i, 1)
+                    i--
+                    break;
             }
             next++
         }
-    });
+    }
     return data
 }
 
@@ -98,6 +94,7 @@ function getInformationByHour(data_input, type_time, object_input, total_amount)
 function getInformationByDay(start_date, end_date, data_input, object_input, total_amount) {
     //check duplicate
     let data = checkDuplicate(data_input)
+    //let data = data_input
     let array_type_name = Object.values(object_input)
 
     let array_label = Object.keys(object_input)
